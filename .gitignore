@@ -1,0 +1,4 @@
+node/node_modules
+node/build
+spice-html5
+websockify
