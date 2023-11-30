@@ -1,0 +1,5 @@
+{
+  "exec": "../websockify/websockify.py 5959 localhost:5900&\nrollup -c\nnode",
+  "ignore": "node/build/*",
+  "ext": "js,html,css"
+}
