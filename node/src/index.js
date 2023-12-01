@@ -9,7 +9,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const fs = require('fs');
-const { exec } = require('child_process');
+const { exec, execSync } = require('child_process');
 const { promisify } = require('util');
 
 const morgan = require('morgan');
@@ -20,11 +20,22 @@ const readdir = promisify(fs.readdir);
 const unlink = promisify(fs.unlink);
 const mkdir = promisify(fs.mkdir);
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
+
+app.use(morgan('dev', {
+  skip: function (req, res) {
+      if (req.url == '/api/list') {
+          return true;
+      } else {
+          return false;
+      }
+  }
+}));
+
 app.use(express.static('build'));
 
 app.get('/api/list', (req, res) => {
-  exec('virsh -c qemu:///system?authfile=/etc/ovirt-hosted-engine/virsh_auth.conf list --all', (err, stdout, stderr) => {
+  /*exec('virsh -c qemu:///system?authfile=/etc/ovirt-hosted-engine/virsh_auth.conf list --all', (err, stdout, stderr) => {
     if (err) {
       console.error(err);
       res.status(500).end();
@@ -46,8 +57,40 @@ app.get('/api/list', (req, res) => {
       });
       const vm = {
         id: fields[1],
-        state: fields[2],
+        domain: fields[2],
         status: status,
+      };
+      vms.push(vm);
+    }
+    res.json(vms);
+    res.end();
+  });*/
+  exec('virsh -c qemu:///system?authfile=/etc/ovirt-hosted-engine/virsh_auth.conf list --all --uuid', (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+      res.status(500).end();
+      return;
+    }
+    const lines = stdout.split('\n');
+    const vms = [];
+    for (let i = 0; i < lines.length - 2; i++) {
+      const line = lines[i];
+      const fields = line.split(/\s+/);
+      const info = execSync(`virsh -c qemu:///system?authfile=/etc/ovirt-hosted-engine/virsh_auth.conf dominfo ${fields[0]}`);
+      const infoLines = info.toString().split('\n');
+      // console.log(infoLines);
+      let dominfo = {};
+      infoLines.forEach((infoLine, index) => {
+        if (index > 0 && infoLine != '') {
+          const infoFields = infoLine.split(':');
+          dominfo[infoFields[0].trim()] = infoFields[1].trim();
+        }
+      });
+      // console.log(dominfo);
+
+      const vm = {
+        uuid: fields[0],
+        domain: dominfo,
       };
       vms.push(vm);
     }
