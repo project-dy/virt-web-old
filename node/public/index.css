@@ -1,0 +1,34 @@
+/**
+ * @license
+ * Copyright (C) 2023 noneinfo01
+ * SPDX-License-Identifier: GPL-2.0
+ */
+
+.floating-action-button {
+  height: 56px;
+  width: 56px;
+  padding: 16px;
+  border-radius: 16px;
+  /*box-sizing: border-box;*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed; /* 위치를 고정하기 위한 속성 */
+  right: 16px; /* 우측으로부터의 거리 */
+  bottom: 16px; /* 하단으로부터의 거리 */
+}
+
+.floating-action-button .icon {
+  height: 24px;
+  width: 24px;
+}
+
+md-list-item .list-item-button {
+  margin: auto;
+  /*vertical-align: middle;*/
+}
+
+md-list-item .list-item-icon {
+  vertical-align: middle;
+  line-height: 1.2; /* 라인 간격을 조절합니다. 필요에 따라 이 값을 조정해 보세요. */
+}

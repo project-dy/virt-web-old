@@ -7,21 +7,15 @@ SPDX-License-Identifier: GPL-2.0
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Node.js</title>
+  <title>virt-web</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="./index.css">
+  <script type="module" src="./index.js"></script>
 </head>
 <body>
-  <h1>Node.js</h1>
-  <p>Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.</p>
-  <script type="module" src="./index.js"></script>
-
-  <label>
-    Material 3
-    <md-checkbox checked></md-checkbox>
-  </label>
-
-  <md-outlined-button>Back</md-outlined-button>
-  <md-filled-button>Next</md-filled-button>
-  <md-switch></md-switch>
   <div id="info"></div>
+  <md-fab aria-label="Tools" class="floating-action-button" id="tools">
+    <md-icon slot="icon" tabindex="-1"><span aria-label="Tools">toolbar</span></md-icon>
+  </md-fab>
 </body>
 </html>
