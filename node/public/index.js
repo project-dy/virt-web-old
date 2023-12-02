@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-2.0
  */
 
-import '@material/web/button/filled-button.js';
+/*import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/checkbox/checkbox.js';
 import '@material/web/switch/switch.js';
@@ -13,6 +13,11 @@ import '@material/web/list/list-item.js';
 import '@material/web/icon/icon.js';
 import '@material/web/fab/fab.js';
 import '@material/web/divider/divider.js';
+import '@material/web/dialog/dialog.js';
+import '@material/web/button/text-button.js';
+import '@material/web/button/filled-tonal-button.js';
+import '@material/web/progress/circular-progress.js';*/
+import '@material/web/all';
 
 window.isSelectedList = [];
 
@@ -86,7 +91,14 @@ function listingInit(data) {
 function listing(data) {
   const list = document.getElementById('info').getElementsByTagName('md-list')[0];
   if (list) {
+    if (list.childElementCount != data.length) {
+      document.getElementById('vmChangedReload').setAttribute('open', 'true');
+    }
     const listItems = list.getElementsByTagName('md-list-item');
+    if (listItems.length != data.length) {
+      document.getElementById('vmChangedReload').setAttribute('open', 'true');
+    }
+
     Array.prototype.slice.call(listItems).forEach((listItem) => {
       const index = listItem.getAttribute('index');
       if (window.isSelectedList[index]) {
@@ -100,6 +112,11 @@ function listing(data) {
       const vm = data.filter((vm) => {
         return vm.domain.UUID === index;
       })[0];
+      // console.log(vm);
+      if (vm == undefined) {
+        listItem.remove();
+        return;
+      }
       if (vm.domain.State === 'running') {
         //state.innerHTML = 'running';
         listItem.getElementsByTagName('md-icon')[0].innerHTML = 'devices';
@@ -128,3 +145,12 @@ function check() {
     });
   });
 }
+
+document.getElementById('tools').addEventListener('click', (event) => {
+  const tools = document.getElementById('tools');
+  if (tools.getAttribute('open') == 'true') {
+    tools.setAttribute('open', 'false');
+  } else {
+    tools.setAttribute('open', 'true');
+  }
+});
