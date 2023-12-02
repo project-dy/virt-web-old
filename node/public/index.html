@@ -17,5 +17,20 @@ SPDX-License-Identifier: GPL-2.0
   <md-fab aria-label="Tools" class="floating-action-button" id="tools">
     <md-icon slot="icon" tabindex="-1"><span aria-label="Tools">toolbar</span></md-icon>
   </md-fab>
+  <md-dialog id="vmChangedReload">
+    <div slot="headline">
+      <md-icon slot="icon">Phonelink_Off</md-icon>
+      Apply the latest changes
+    </div>
+    <form slot="content" id="form-id" method="dialog">
+      <p>VM has been created/deleted by an external command.</p>
+      <p>If you don't want to reflect the above changes, you don't have to refresh it.</p>
+      <p>This is <a style="font-weight: bold;">Optional</a>.</p>
+    </form>
+    <div slot="actions">
+      <md-filled-tonal-button form="form-id" onclick="location.reload()">Refresh <md-icon slot="icon">Refresh</md-icon></md-filled-tonal-button>
+      <md-text-button form="form-id" onclick="document.getElementById('vmChangedReload').removeAttribute('open')">Cancle</md-text-button>
+    </div>
+  </md-dialog>
 </body>
 </html>
