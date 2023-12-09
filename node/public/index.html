@@ -9,34 +9,100 @@ SPDX-License-Identifier: GPL-2.0
   <meta charset="UTF-8">
   <title>virt-web</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <link rel="stylesheet" href="./index.css">
   <script type="module" src="./index.js"></script>
 </head>
-<body>
-<md-list>
-  <md-list-item>
-    <div id="info">
-      <md-circular-progress indeterminate></md-circular-progress>
-    </div>
-    <md-fab aria-label="Tools" class="floating-action-button" id="tools">
-      <md-icon slot="icon" tabindex="-1"><span aria-label="Tools">toolbar</span></md-icon>
-    </md-fab>
-    <md-dialog id="vmChangedReload">
-      <div slot="headline">
-        <md-icon slot="icon">Phonelink_Off</md-icon>
-        Apply the latest changes
-      </div>
-      <form slot="content" id="form-id" method="dialog">
-        <p>VM has been created/deleted by an external command.</p>
-        <p>If you don't want to reflect the above changes, you don't have to refresh it.</p>
-        <p>This is <a style="font-weight: bold;">Optional</a>.</p>
-      </form>
-      <div slot="actions">
-        <md-filled-tonal-button form="form-id" onclick="location.reload()">Refresh <md-icon slot="icon">Refresh</md-icon></md-filled-tonal-button>
-        <md-text-button form="form-id" onclick="document.getElementById('vmChangedReload').removeAttribute('open')">Cancle</md-text-button>
-      </div>
-    </md-dialog>
-  </md-list-item>
+<body style="margin: 0; min-height: 100vh;">
+<md-list style="min-height: 100vh;">
+<md-list-item>
+
+<div id="info">
+  <md-circular-progress indeterminate></md-circular-progress>
+</div>
+
+<md-fab aria-label="Tools" class="floating-action-button" id="tools">
+  <md-icon slot="icon" tabindex="-1"><span aria-label="Tools">toolbar</span></md-icon>
+</md-fab>
+
+<md-dialog id="toolsDialog">
+  <div slot="headline">
+    <md-icon slot="icon">toolbar</md-icon>
+    Tasks
+  </div>
+  <form slot="content" id="toolsDialog-Form" method="dialog" style="margin: 10px">
+    <!--<p>Tools</p>-->
+    <md-list style="background-color: inherit;">
+      <md-list-item>
+        <md-radio name="toolsDialog-Form-Radio" class="toolsDialog-Form-Radio" value="Start VM" apiPath="start"></md-radio>
+        Start VM
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item>
+        <md-radio name="toolsDialog-Form-Radio" class="toolsDialog-Form-Radio" value="Shutdown VM" apiPath="shutdown"></md-radio>
+        Shutdown VM
+      </md-list-item>
+    </md-list>
+  </form>
+  <div slot="actions">
+    <md-filled-tonal-button form="toolsDialog-Cancle" onclick="document.getElementById('toolsDialog').removeAttribute('open')">Cancle</md-filled-tonal-button>
+    <md-filled-button autofocus form="toolsDialog-Confirm" onclick="
+    document.getElementById('toolsDialog').removeAttribute('open');
+    
+    // document.getElementById('toolsConfirmDialog-Form-Task').innerHTML = document.querySelector('md-radio[name:`toolsDialog-Form-Radio`]:checked').value;
+    document.getElementById('toolsConfirmDialog').setAttribute('open', 'true');
+    ">Confirm</md-filled-button>
+  </div>
+</md-dialog>
+
+<md-dialog id="toolsConfirmDialog">
+  <div slot="headline">
+    <md-icon slot="icon">warning</md-icon>
+    Confirm
+  </div>
+  <form slot="content" id="toolsConfirmDialog-Form" method="dialog">
+    <p>Are you sure you want to perform <a id="toolsConfirmDialog-Form-Task" style="font-weight: bold;"></a> task to</p>
+    <p id="toolsConfirmDialog-Form-Selected-vmName"></p> 
+  </form>
+  <div slot="actions">
+    <md-filled-tonal-button autofocus form="toolsConfirmDialog-Form" onclick="document.getElementById('toolsConfirmDialog').removeAttribute('open')">Cancle</md-filled-tonal-button>
+    <md-filled-button form="toolsConfirmDialog-Form" id="toolsConfirmDialog-Form-ConfirmButton">Confirm</md-filled-button>
+  </div>
+</md-dialog>
+
+<md-dialog id="vmChangedReload">
+  <div slot="headline">
+    <md-icon slot="icon">Phonelink_Off</md-icon>
+    Apply the latest changes
+  </div>
+  <form slot="content" id="form-id" method="dialog">
+    <p>VM has been created/deleted by an external command.</p>
+    <p>If you don't want to reflect the above changes, you don't have to refresh it.</p>
+    <p>This is <a style="font-weight: bold;">Optional</a>.</p>
+  </form>
+  <div slot="actions">
+    <md-text-button form="form-id" onclick="document.getElementById('vmChangedReload').removeAttribute('open')">Cancle</md-text-button>
+    <md-filled-tonal-button autofocus form="form-id" onclick="location.reload()">Refresh <md-icon slot="icon">Refresh</md-icon></md-filled-tonal-button>
+  </div>
+</md-dialog>
+
+<md-dialog id="err-vmFetch">
+  <div slot="headline">
+    <md-icon slot="icon">error</md-icon>
+    Error
+  </div>
+  <form slot="content" id="err-vmFetch-Form" method="dialog">
+    <p>Failed to fetch VM list.</p>
+    <p>Check the connection to the server.</p>
+  </form>
+  <div slot="actions">
+    <md-filled-tonal-button form="err-vmFetch-Form" onclick="clearInterval(autoFetchInterval);document.getElementById('err-vmFetch').removeAttribute('open')">Cancle</md-filled-tonal-button>
+    <md-filled-button autofocus form="err-vmFetch-Form" onclick="document.getElementById('refreshStatus').click();">Refresh</md-filled-button>
+  </div>
+</md-dialog>
+
+</md-list-item>
 </md-list>
 </body>
 </html>

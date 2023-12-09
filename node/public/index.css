@@ -23,12 +23,12 @@
   width: 24px;
 }
 
-md-list-item .list-item-button {
+.list-item-button {
   margin: auto;
   /*vertical-align: middle;*/
 }
 
-md-list-item .list-item-icon {
+.list-item-icon {
   vertical-align: middle;
   line-height: 1.2;
 }
