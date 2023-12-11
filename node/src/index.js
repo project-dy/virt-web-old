@@ -20,22 +20,16 @@ const readdir = promisify(fs.readdir);
 const unlink = promisify(fs.unlink);
 const mkdir = promisify(fs.mkdir);
 
+const logger = require('../logger.js');
+
+logger.verbose('Starting node server');
+
+app.use(morgan('dev', { stream: logger.stream }));
 
 // get routers via call the function from ../router/routers.js
 const routers = require('../router/routers.js');
 routers.registerRouter(app);
 
-// app.use(morgan('dev'));
-app.use(morgan('dev', {
-  skip: function (req, res) {
-      if (req.url == '/api/list') {
-          return true;
-      } else {
-          return false;
-      }
-  }
-}));
-
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  logger.info(`App listening at http://localhost:${port}`);
 });

@@ -1,6 +1,6 @@
 function registerRouter(app) {
   // app.use('/api', apiRouter);
-  console.log('registerRouter');
+  // console.log('registerRouter');
   
   const defaultRouter = require('./default.js');
   app.use('/', defaultRouter);

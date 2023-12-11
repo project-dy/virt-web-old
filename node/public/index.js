@@ -17,78 +17,61 @@ import '@material/web/dialog/dialog.js';
 import '@material/web/button/text-button.js';
 import '@material/web/button/filled-tonal-button.js';
 import '@material/web/progress/circular-progress.js';*/
-import '@material/web/all';
+import '@material/web/all'; // import all components from material web 3
 // import Toastify from 'toastify-js'
 
-document.getElementsByTagName('body')[0].style.display = 'block';
+document.getElementsByTagName('body')[0].style.display = 'block'; // show body after all components loaded
 
-window.isSelectedList = [];
+window.isSelectedList = []; // list of selected vms
 
-function autoFetch () {
-  fetch('/api/list', { cache: "no-store" }).then((response) => {
-    return response.json();
+function autoFetch () { // fetch data from server
+  fetch('/api/list', { cache: "no-store" }).then((response) => { // start fetch
+    return response.json(); // return json
   })
-  .catch((err) => {
+  .catch((err) => { // catch error
     // console.error(err);
-    clearInterval(autoFetchInterval);
-    document.getElementById('err-vmFetch').setAttribute('open', 'true');
-    return null;
+    clearInterval(autoFetchInterval); // stop auto fetch
+    document.getElementById('err-vmFetch').setAttribute('open', 'true'); // show error dialog
+    return null; // return null
   })
-  .then((data) => {
-    if (data == null) {
-      return;
+  .then((data) => { // then
+    if (data == null) { // if data is null (= caught by catch)
+      return; // return
     }
-    listing(data);
-    check();
-    document.getElementById('refreshStatusIcon').outerHTML = '<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon>';
+    listing(data); // listing data
+    check(); // init check
+    document.getElementById('refreshStatusIcon').outerHTML = '<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon>'; // reset refresh icon
   });
 }
-autoFetch();
+autoFetch(); // start auto fetch
 
-window.autoFetchInterval = setInterval(() => {autoFetch()}, 400);
+window.autoFetchInterval = setInterval(() => {autoFetch()}, 400); // start auto fetch interval
 
-window.autoFetch = autoFetch;
-let autoFetchInterval = window.autoFetchInterval;
+window.autoFetch = autoFetch; // export autoFetch function
+let autoFetchInterval = window.autoFetchInterval; // import autoFetchInterval
 
-function listingInit(data) {
-  console.log(data);
-  let button = document.createElement('md-text-button');
-  button.id = 'refreshStatus';
-  button.innerHTML = `<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon>Refresh Status`;
-  document.getElementById('info').innerHTML = '';
-  document.getElementById('info').appendChild(button);
-  button = document.getElementById('refreshStatus');
-  button.addEventListener('click', (event) => {
-    // document.getElementById('refreshStatusIcon').deleteAttribute('slot');
-    document.getElementById('refreshStatusIcon').outerHTML = '<md-circular-progress indeterminate id="refreshStatusIcon"></md-circular-progress>';
-    /*fetch('/api/list', { cache: "no-store" }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      listing(data);
-      check();
-      // document.getElementById('refreshStatusIcon').setAttribute('slot', 'icon');
-      // document.getElementById('refreshStatusIcon').innerHTML = 'refresh';
-      document.getElementById('refreshStatusIcon').outerHTML = '<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon>';
-    });*/
-    window.autoFetchInterval = setInterval(() => {autoFetch()}, 400);
+function listingInit(data) { // init listing
+  console.log(data); // log data
+  let button = document.createElement('md-text-button'); // create button
+  button.id = 'refreshStatus'; // set button id
+  button.innerHTML = `<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon>Refresh Status`; // set button innerHTML
+  document.getElementById('info').innerHTML = ''; // reset info
+  document.getElementById('info').appendChild(button); // append button to info
+  button = document.getElementById('refreshStatus'); // get button
+  
+  button.addEventListener('click', (event) => { // add event listener
+    document.getElementById('refreshStatusIcon').outerHTML = '<md-circular-progress indeterminate id="refreshStatusIcon"></md-circular-progress>'; // set refresh icon to loading
+    window.autoFetchInterval = setInterval(() => {autoFetch()}, 400); // start auto fetch interval
   });
-  const list = document.createElement('md-list');
-  data.forEach((vm, index) => {
-    if (vm.domain.UUID == undefined || vm.domain.error) {
-      return;
+  const list = document.createElement('md-list'); // create list
+  data.forEach((vm, index) => { // for each vm
+    if (vm.domain.UUID == undefined || vm.domain.error) { // if vm is undefined or error
+      return; // return
     }
-    const div = document.createElement('div');
-    let state = '<md-circular-progress indeterminate></md-circular-progress>';
-    /*if (vm.domain.State === 'running') {
-      state = `<md-icon slot="icon">devices</md-icon>`;
-    } else if (vm.domain.State == 'shut off') {
-      state = `<md-icon slot="icon">devices_off</md-icon>`;
-    }*/
-    // console.log(vm);
-    /*if (window.isSelectedList[index] == undefined) {
-      window.isSelectedList[index] = false;
-    };*/
-    // window.isSelectedList[index] = false;
+    const div = document.createElement('div'); // create div
+
+    let state = '<md-circular-progress indeterminate></md-circular-progress>'; // set state to loading
+
     div.innerHTML = `
       <md-list-item index="${vm.domain.UUID}">
         <md-checkbox class="list-item-button"></md-checkbox>
@@ -99,66 +82,46 @@ function listingInit(data) {
         <!--<md-switch></md-switch>-->
       </md-list-item>
       <md-divider></md-divider>
-    `;/**//*
-    const listItem = document.createElement('md-list-item');
-    const checkbox = document.createElement('md-checkbox');
-    const id = document.createElement('span');
-    const state = document.createElement('span');
-    const status = document.createElement('span');
-    const switcher = document.createElement('md-switch');
-    id.innerHTML = vm.id;
-    state.innerHTML = vm.domain;
-    status.innerHTML = vm.status;
-    listItem.appendChild(checkbox);
-    listItem.appendChild(id);
-    listItem.appendChild(state);
-    listItem.appendChild(status);
-    listItem.appendChild(switcher);
-    div.appendChild(listItem);/**/
-    list.appendChild(div);
+    `; // set div innerHTML
+
+    list.appendChild(div); // append div to list
   });
   // console.log(list);
-  document.getElementById('info').appendChild(list);
-  /*const applyButton = document.createElement('md-filled-button');
-  applyButton.innerHTML = 'Apply';
-  document.getElementById('info').appendChild(applyButton);*/
+  document.getElementById('info').appendChild(list); // append list to info
 };
 
-function listing(data) {
-  const list = document.getElementById('info').getElementsByTagName('md-list')[0];
-  if (list) {
-    if (list.childElementCount != data.length) {
-      document.getElementById('vmChangedReload').setAttribute('open', 'true');
+function listing(data) { // listing data
+  const list = document.getElementById('info').getElementsByTagName('md-list')[0]; // get list
+  if (list) { // if list exists
+    if (list.childElementCount != data.length) { // if list childElementCount != data.length
+      document.getElementById('vmChangedReload').setAttribute('open', 'true'); // show vmChangedReload dialog
     }
-    const listItems = list.getElementsByTagName('md-list-item');
-    if (listItems.length != data.length) {
-      document.getElementById('vmChangedReload').setAttribute('open', 'true');
+    const listItems = list.getElementsByTagName('md-list-item'); // get listItems
+    if (listItems.length != data.length) { // if listItems.length != data.length
+      document.getElementById('vmChangedReload').setAttribute('open', 'true'); // show vmChangedReload dialog
     }
 
-    Array.prototype.slice.call(listItems).forEach((listItem, num) => {
-      const index = listItem.getAttribute('index');
-      listItem.setAttribute('num', num);
-      if (window.isSelectedList[index]) {
-        listItem.getElementsByTagName('md-checkbox')[0].setAttribute('checked', 'true');
-      } else {
-        listItem.getElementsByTagName('md-checkbox')[0].removeAttribute('checked');
+    Array.prototype.slice.call(listItems).forEach((listItem, num) => { // for each listItem
+      const index = listItem.getAttribute('index'); // get index
+      listItem.setAttribute('num', num); // set num
+      if (window.isSelectedList[index]) { // if isSelectedList[index] exists
+        listItem.getElementsByTagName('md-checkbox')[0].setAttribute('checked', 'true'); // set checked
+      } else { // if isSelectedList[index] not exists
+        listItem.getElementsByTagName('md-checkbox')[0].removeAttribute('checked'); // remove checked
       }
-      // console.log(data, index);
-      //const state = listItem.getElementsByTagName('span')[2];
-      // const vm = data[index];
-      const vm = data.filter((vm) => {
+      const vm = data.filter((vm) => { // filter data
         return vm.domain.UUID === index;
-      })[0];
+      })[0]; // get vm
 
-      if (vm.domain.UUID == undefined || vm.domain.error) {
-        return;
+      if (vm.domain.UUID == undefined || vm.domain.error) { // if vm is undefined or error
+        return; // return
       }
 
       // console.log(vm);
-      if (vm == undefined) {
-        document.getElementById('vmChangedReload').setAttribute('open', 'true');
-        listItem.remove();
-        return;
+      if (vm == undefined) { // if vm is undefined (= vm not exists = vm deleted)
+        document.getElementById('vmChangedReload').setAttribute('open', 'true'); // show vmChangedReload dialog
+        listItem.remove(); // remove listItem
+        return; // return
       }
       // console.log(listItem);
       if (vm.domain.State === 'running') {
@@ -189,12 +152,12 @@ function listing(data) {
       // listItem.getElementsByTagName('span')[0].innerHTML = vm.domain.UUID;
       // listItem.getElementsByTagName('span')[1].innerHTML = vm.domain.Name;
       // console.log(listItem);
-      listItem.querySelector('#vmUUID').innerHTML = vm.domain.UUID;
-      listItem.querySelector('#vmName').innerHTML = vm.domain.Name;
+      listItem.querySelector('#vmUUID').innerHTML = vm.domain.UUID; // set vmUUID
+      listItem.querySelector('#vmName').innerHTML = vm.domain.Name; // set vmName
       // console.log(index);
     });
   } else {
-    listingInit(data);
+    listingInit(data); // init listing
   }
 }
 

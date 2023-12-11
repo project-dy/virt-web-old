@@ -1,0 +1,5 @@
+{
+  "debug.javascript.pickAndAttachOptions": {
+    "outputCapture": "std"
+  }
+}

@@ -1,5 +1,6 @@
 node/node_modules
 node/build
+logs
 #noVNC
 #spice-html5
 #websockify
