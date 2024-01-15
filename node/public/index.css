@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: GPL-2.0
  */
 
+.text, a, p {
+  font-family: Arial, Roboto, 'Noto Sans KR', sans-serif;
+}
+
 .floating-action-button {
   height: 56px;
   width: 56px;

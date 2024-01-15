@@ -14,10 +14,11 @@ SPDX-License-Identifier: GPL-2.0
   <link rel="stylesheet" href="./index.css">
   <script type="module" src="./index.js"></script>
 </head>
-<body style="margin: 0; min-height: 100vh; display: none;">
+<body style="margin: 0; min-height: 100vh; display: none;"> <!-- display: none; while dom content loaded -->
 <md-list style="min-height: 100vh;">
 <md-list-item>
 
+<!-- While Loading -->
 <div id="info">
   <md-circular-progress indeterminate></md-circular-progress>
 </div>
@@ -29,19 +30,19 @@ SPDX-License-Identifier: GPL-2.0
 <md-dialog id="toolsDialog">
   <div slot="headline">
     <md-icon slot="icon">toolbar</md-icon>
-    Tasks
+    <span class="text">Tasks</span>
   </div>
   <form slot="content" id="toolsDialog-Form" method="dialog" style="margin: 10px">
     <!--<p>Tools</p>-->
     <md-list style="background-color: inherit;">
       <md-list-item>
         <md-radio name="toolsDialog-Form-Radio" class="toolsDialog-Form-Radio" value="Start VM" apiPath="start"></md-radio>
-        Start VM
+        <span class="text">Start VM</span>
       </md-list-item>
       <md-divider></md-divider>
       <md-list-item>
         <md-radio name="toolsDialog-Form-Radio" class="toolsDialog-Form-Radio" value="Shutdown VM" apiPath="shutdown"></md-radio>
-        Shutdown VM
+        <span class="text">Shutdown VM</span>
       </md-list-item>
     </md-list>
   </form>
@@ -58,23 +59,23 @@ SPDX-License-Identifier: GPL-2.0
 
 <md-dialog id="toolsConfirmDialog">
   <div slot="headline">
-    <md-icon slot="icon">warning</md-icon>
-    Confirm
+    <md-icon slot="icon">Warning</md-icon>
+    <span class="text">Confirm</span>
   </div>
   <form slot="content" id="toolsConfirmDialog-Form" method="dialog">
     <p>Are you sure you want to perform <a id="toolsConfirmDialog-Form-Task" style="font-weight: bold;"></a> task to</p>
     <p id="toolsConfirmDialog-Form-Selected-vmName"></p> 
   </form>
   <div slot="actions">
-    <md-filled-tonal-button autofocus form="toolsConfirmDialog-Form" onclick="document.getElementById('toolsConfirmDialog').removeAttribute('open')">Cancle</md-filled-tonal-button>
-    <md-filled-button form="toolsConfirmDialog-Form" id="toolsConfirmDialog-Form-ConfirmButton">Confirm</md-filled-button>
+    <md-filled-tonal-button autofocus form="toolsConfirmDialog-Form" onclick="document.getElementById('toolsConfirmDialog').removeAttribute('open')"><span class="text">Cancle<span class="text"></span></md-filled-tonal-button>
+    <md-filled-button form="toolsConfirmDialog-Form" id="toolsConfirmDialog-Form-ConfirmButton"><span class="text">Confirm</span></md-filled-button>
   </div>
 </md-dialog>
 
 <md-dialog id="vmChangedReload">
   <div slot="headline">
-    <md-icon slot="icon">Phonelink_Off</md-icon>
-    Apply the latest changes
+    <md-icon slot="icon">Phonelink_OFF</md-icon>
+    <span class="text">Apply the latest changes</span>
   </div>
   <form slot="content" id="form-id" method="dialog">
     <p>VM has been created/deleted by an external command.</p>
@@ -83,22 +84,22 @@ SPDX-License-Identifier: GPL-2.0
   </form>
   <div slot="actions">
     <md-text-button form="form-id" onclick="document.getElementById('vmChangedReload').removeAttribute('open')">Cancle</md-text-button>
-    <md-filled-tonal-button autofocus form="form-id" onclick="location.reload()">Refresh <md-icon slot="icon">Refresh</md-icon></md-filled-tonal-button>
+    <md-filled-tonal-button autofocus form="form-id" onclick="location.reload()"><span class="text">Refresh</span> <md-icon slot="icon">Refresh</md-icon></md-filled-tonal-button>
   </div>
 </md-dialog>
 
 <md-dialog id="err-vmFetch">
   <div slot="headline">
     <md-icon slot="icon">error</md-icon>
-    Error
+    <span class="text">Error</span>
   </div>
   <form slot="content" id="err-vmFetch-Form" method="dialog">
     <p>Failed to fetch VM list.</p>
     <p>Check the connection to the server.</p>
   </form>
   <div slot="actions">
-    <md-filled-tonal-button form="err-vmFetch-Form" onclick="clearInterval(autoFetchInterval);document.getElementById('err-vmFetch').removeAttribute('open')">Cancle</md-filled-tonal-button>
-    <md-filled-button autofocus form="err-vmFetch-Form" onclick="document.getElementById('refreshStatus').click();">Refresh</md-filled-button>
+    <md-filled-tonal-button form="err-vmFetch-Form" onclick="clearInterval(autoFetchInterval);document.getElementById('err-vmFetch').removeAttribute('open')"><span class="text">Cancle</span></md-filled-tonal-button>
+    <md-filled-button autofocus form="err-vmFetch-Form" onclick="document.getElementById('refreshStatus').click();"><span class="text">Refresh</span></md-filled-button>
   </div>
 </md-dialog>
 

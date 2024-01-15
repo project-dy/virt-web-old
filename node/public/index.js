@@ -54,7 +54,7 @@ function listingInit(data) { // init listing
   console.log(data); // log data
   let button = document.createElement('md-text-button'); // create button
   button.id = 'refreshStatus'; // set button id
-  button.innerHTML = `<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon>Refresh Status`; // set button innerHTML
+  button.innerHTML = `<md-icon slot="icon" id="refreshStatusIcon">refresh</md-icon><span class="text">Refresh Status</span>`; // set button innerHTML
   document.getElementById('info').innerHTML = ''; // reset info
   document.getElementById('info').appendChild(button); // append button to info
   button = document.getElementById('refreshStatus'); // get button
@@ -75,8 +75,8 @@ function listingInit(data) { // init listing
     div.innerHTML = `
       <md-list-item index="${vm.domain.UUID}">
         <md-checkbox class="list-item-button"></md-checkbox>
-        <span id="vmUUID">${vm.domain.UUID}</span>
-        <span id="vmName">${vm.domain.Name}</span>
+        <span id="vmUUID" class="text">${vm.domain.UUID}</span>
+        <span id="vmName" class="text">${vm.domain.Name}</span>
         <span class="list-item-icon"><md-icon slot="icon"></md-icon></span>
         <!--${state}-->
         <!--<md-switch></md-switch>-->
@@ -173,7 +173,8 @@ function check() {
         if (isSelected) {
           // console.log(isSelected);
           window.temp = isSelected;
-          selected += `<span class="list-item-icon"><md-icon slot="icon">devices</md-icon><span>${isSelected[1].getElementsByTagName('span')[1].innerHTML}<br> `;
+          selected += `<span class="list-item-icon"><md-icon slot="icon">devices</md-icon><span>
+          <span class="text">${isSelected[1].getElementsByTagName('span')[1].innerHTML}</span><br>`;
         }
       });
       document.getElementById('toolsConfirmDialog-Form-Selected-vmName').innerHTML = selected;
@@ -228,6 +229,7 @@ document.getElementById('toolsConfirmDialog-Form-ConfirmButton').addEventListene
             // background: "linear-gradient(to right, #00b09b, #96c93d)",
             background: "var(--md-filled-tonal-button-container-color, var(--md-sys-color-secondary-container, #e8def8))",
             color: "var(--md-list-item-label-text-color, var(--md-sys-color-on-surface, #1d1b20))",
+            'font-familly': 'Roboto, sans-serif',
           },
           onClick: function(){} // Callback after click
         }).showToast();
@@ -244,6 +246,7 @@ document.getElementById('toolsConfirmDialog-Form-ConfirmButton').addEventListene
           style: {
             // background: "linear-gradient(to right, #00b09b, #96c93d)",
             background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+            fontFamily: 'Roboto, sans-serif',
           },
           onClick: function(){} // Callback after click
         }).showToast();
